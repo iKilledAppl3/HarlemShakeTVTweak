@@ -15,7 +15,8 @@
   /Users/ikilledappl3/theos/vendor/include/TVSettingsKit/TSKSettingGroup.h \
   /Users/ikilledappl3/theos/vendor/include/TVSettingsKit/TSKSettingItem.h \
   /Users/ikilledappl3/theos/vendor/include/TVSettingsKit/TSKVibrantImageView.h \
-  /Users/ikilledappl3/theos/vendor/include/TVSettingsKit/TSKPreviewViewController.h
+  /Users/ikilledappl3/theos/vendor/include/TVSettingsKit/TSKPreviewViewController.h \
+  ../VLMHarlemShake.h
 
 /Users/ikilledappl3/theos/Prefix.pch:
 
@@ -50,3 +51,5 @@ Common.h:
 /Users/ikilledappl3/theos/vendor/include/TVSettingsKit/TSKVibrantImageView.h:
 
 /Users/ikilledappl3/theos/vendor/include/TVSettingsKit/TSKPreviewViewController.h:
+
+../VLMHarlemShake.h:

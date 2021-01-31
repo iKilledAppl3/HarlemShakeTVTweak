@@ -7,7 +7,7 @@ THEOS_DEVICE_IP = 192.168.1.211
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = HarlemShakeTVPrefs
-HarlemShakeTVPrefs_FILES = $(wildcard *.mm)
+HarlemShakeTVPrefs_FILES = $(wildcard *.mm) ../VLMHarlemShakeModified.m
 HarlemShakeTVPrefs_INSTALL_PATH = /Library/PreferenceBundles
 HarlemShakeTVPrefs_FRAMEWORKS = UIKit TVSettingKit
 HarlemShakeTVPrefs_PRIVATE_FRAMEWORKS = TVSettingKit

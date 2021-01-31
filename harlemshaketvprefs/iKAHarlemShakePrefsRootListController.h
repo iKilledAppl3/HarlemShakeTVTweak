@@ -1,4 +1,5 @@
 #import "Common.h"
+#import "../VLMHarlemShake.h"
 
 // statically call the item
 TSKSettingItem *kEnabled;
@@ -13,7 +14,6 @@ TSKSettingItem *kRespringButton;
 @interface iKAHarlemShakePrefsRootListController : TSKViewController
 @property (nonatomic, strong) UIBlurEffect *respringBlur;
 @property (nonatomic, strong) UIVisualEffectView *respringEffectView;
-@property (nonatomic, strong) UIWindow *mainAppRootWindow;
 @end
 
 @interface NSTask : NSObject

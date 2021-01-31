@@ -11,6 +11,11 @@
 
 */
 
+TSKPreviewViewController *item;
+VLMHarlemShake *harlemShake;
+UIView *lonerView; 
+BOOL animating;
+
 @implementation iKAHarlemShakePrefsRootListController
 
 inline NSString *GetPrefVal(NSString *key){
@@ -29,7 +34,7 @@ inline NSString *GetPrefVal(NSString *key){
     
     
     // Respring Button here baby! No documenation found so I had to figure this one out myself :P
-    kRespringButton = [TSKSettingItem actionItemWithTitle:@"Respring" description:@"Apply Changes with a Respring! \n © Copyright 2019 J.K. Hayslip (iKilledAppl3) & ToxicAppl3 INSDC/iKilledAppl3 LLC." representedObject:facade keyPath:PLIST_PATH target:self action:@selector(doAFancyRespring)];
+    kRespringButton = [TSKSettingItem actionItemWithTitle:@"Respring" description:@"Apply Changes with a Respring! \n © Copyright 2019 - 2021 J.K. Hayslip (@iKilledAppl3) & iKilledAppl3 LLC. All rights reserved." representedObject:facade keyPath:PLIST_PATH target:self action:@selector(doAFancyRespring)];
     
     
     TSKSettingGroup *group = [TSKSettingGroup groupWithTitle:@"Enable Tweak" settingItems:@[kEnabled]];
@@ -49,16 +54,17 @@ inline NSString *GetPrefVal(NSString *key){
 
 // lets blur the screen before we respring the apple tv! Well chop down wood that is :P
 -(void)doAFancyRespring {
-    self.mainAppRootWindow = [UIApplication sharedApplication].keyWindow;
     self.respringBlur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
     self.respringEffectView = [[UIVisualEffectView alloc] initWithEffect:self.respringBlur];
-    self.respringEffectView.frame = [[UIScreen mainScreen] bounds];
-    [self.mainAppRootWindow addSubview:self.respringEffectView];
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:5.0];
-    [self.respringEffectView setAlpha:0];
-    [UIView commitAnimations];
-    [self performSelector:@selector(respring) withObject:nil afterDelay:3.0];
+    self.respringEffectView.frame = self.view.frame;
+    [self.respringEffectView setAlpha:0.0];
+    [[self view] addSubview:self.respringEffectView];
+
+     [UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [self.respringEffectView setAlpha:1.0];
+    } completion:^(BOOL finished) {
+        [self respring];
+    }];
 
 }
 
@@ -83,37 +89,43 @@ inline NSString *GetPrefVal(NSString *key){
     testObject.headerText = @"HarlemShakeTV";
     testObject.initialText = [[self ourPreferences] stringForKey:item.keyPath];
     
-    if ([testObject respondsToSelector:@selector(setEditingDelegate:)]){
-        [testObject setEditingDelegate:self];
-    }
-    [testObject setEditingItem:item];
     [self.navigationController pushViewController:testObject animated:TRUE];
 }
 
-- (void)editingController:(id)arg1 didCancelForSettingItem:(TSKSettingItem *)arg2 {
-    [super editingController:arg1 didCancelForSettingItem:arg2];
-}
-- (void)editingController:(id)arg1 didProvideValue:(id)arg2 forSettingItem:(TSKSettingItem *)arg3 {
-    [super editingController:arg1 didProvideValue:arg2 forSettingItem:arg3];
-    
-    TVSPreferences *prefs = [TVSPreferences preferencesWithDomain:@"com.ikilledappl3.harlemshaketv"];
-    
-    [prefs setObject:arg2 forKey:arg3.keyPath];
-    [prefs synchronize];
-    
+
+-(void)doTheHarlemShake {
+    lonerView = item.view;
+    if (!animating) {
+  harlemShake = [[VLMHarlemShake alloc] initWithLonerView:lonerView];
+  }
+
+  if (animating) {
+    return;
+  }
+
+  if (lonerView != nil) {
+    animating = YES;
+  }
+  
+
+  [harlemShake shakeWithCompletion:^{ // this will shake the icons view.
+    animating = NO;
+    harlemShake = nil;
+}];
 }
 
 
 // This is to show our tweak's icon instead of the boring Apple TV logo :)
 -(id)previewForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    TSKPreviewViewController *item = [super previewForItemAtIndexPath:indexPath];
+    item = [super previewForItemAtIndexPath:indexPath];
     
-    NSString *imagePath = [[NSBundle bundleForClass:self.class] pathForResource:@"HarlemShakeTV-Header" ofType:@"png"];
+    NSString *imagePath = [[NSBundle bundleForClass:self.class] pathForResource:@"HarlemShakeTV" ofType:@"png"];
     UIImage *icon = [UIImage imageWithContentsOfFile:imagePath];
     if (icon != nil) {
         TSKVibrantImageView *imageView = [[TSKVibrantImageView alloc] initWithImage:icon];
         [item setContentView:imageView];
+         [self doTheHarlemShake];
         
     }
     
